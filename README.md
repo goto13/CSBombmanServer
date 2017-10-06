@@ -55,7 +55,7 @@ https://github.com/ha2ne2/BombmanServer
 
 #### SampleJSONFromServer
 
-###### Turn29
+###### Turn20
 
 ![Turn20](https://raw.githubusercontent.com/goto13/CSBombmanServer/image/images/turn20.png "Turn20")
 
@@ -63,11 +63,15 @@ https://github.com/ha2ne2/BombmanServer
 {"turn":20,"walls":[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[1,0],[1,14],[2,0],[2,2],[2,4],[2,6],[2,8],[2,10],[2,12],[2,14],[3,0],[3,14],[4,0],[4,2],[4,4],[4,6],[4,8],[4,10],[4,12],[4,14],[5,0],[5,14],[6,0],[6,2],[6,4],[6,6],[6,8],[6,10],[6,12],[6,14],[7,0],[7,14],[8,0],[8,2],[8,4],[8,6],[8,8],[8,10],[8,12],[8,14],[9,0],[9,14],[10,0],[10,2],[10,4],[10,6],[10,8],[10,10],[10,12],[10,14],[11,0],[11,14],[12,0],[12,2],[12,4],[12,6],[12,8],[12,10],[12,12],[12,14],[13,0],[13,14],[14,0],[14,1],[14,2],[14,3],[14,4],[14,5],[14,6],[14,7],[14,8],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14]],"blocks":[[5,6],[11,1],[13,3],[4,13],[1,4],[10,1],[3,13],[11,10],[9,1],[5,7],[13,4],[1,5],[13,11],[9,2],[7,8],[12,3],[3,6],[11,3],[7,9],[8,1],[3,7],[6,9],[9,10],[2,7],[5,8],[11,4],[4,1],[7,2],[9,11],[5,9],[10,5],[8,11],[13,6],[11,12],[1,7],[6,3],[4,9],[9,4],[3,1],[11,13],[7,11],[5,2],[10,13],[1,8],[9,5],[6,11],[9,12],[5,3],[3,9],[8,5],[11,6],[4,3],[7,4],[3,10],[3,3],[9,13],[5,12],[10,7],[8,13],[13,8],[1,10],[7,5],[3,4],[6,5],[2,11],[2,3],[13,9],[1,11],[9,7],[7,13],[12,9],[8,7],[11,9],[5,5],[10,9],[12,11],[10,3],[13,5],[7,3],[7,10],[12,5],[5,11],[11,7],[4,11],[9,6],[3,11],[11,8],[3,12],[1,3],[7,7]],"players":[{"name":"敵","pos":{"x":1,"y":2},"power":2,"setBombLimit":2,"ch":"敵","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":0},{"name":"あなた","pos":{"x":2,"y":13},"power":2,"setBombLimit":2,"ch":"あ","isAlive":true,"setBombCount":1,"totalSetBombCount":1,"id":1},{"name":"何か","pos":{"x":12,"y":1},"power":2,"setBombLimit":2,"ch":"何","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":2},{"name":"何か","pos":{"x":12,"y":13},"power":2,"setBombLimit":2,"ch":"何","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":3}],"bombs":[{"pos":{"x":2,"y":13},"timer":9,"power":2}],"items":[],"fires":[]}
 ```
 
+###### Turn29
+
 ![Turn29](https://raw.githubusercontent.com/goto13/CSBombmanServer/image/images/turn29.png "Turn29")
 
 ```
 {"turn":29,"walls":[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[1,0],[1,14],[2,0],[2,2],[2,4],[2,6],[2,8],[2,10],[2,12],[2,14],[3,0],[3,14],[4,0],[4,2],[4,4],[4,6],[4,8],[4,10],[4,12],[4,14],[5,0],[5,14],[6,0],[6,2],[6,4],[6,6],[6,8],[6,10],[6,12],[6,14],[7,0],[7,14],[8,0],[8,2],[8,4],[8,6],[8,8],[8,10],[8,12],[8,14],[9,0],[9,14],[10,0],[10,2],[10,4],[10,6],[10,8],[10,10],[10,12],[10,14],[11,0],[11,14],[12,0],[12,2],[12,4],[12,6],[12,8],[12,10],[12,12],[12,14],[13,0],[13,14],[14,0],[14,1],[14,2],[14,3],[14,4],[14,5],[14,6],[14,7],[14,8],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14]],"blocks":[[5,6],[11,1],[13,3],[4,13],[1,4],[10,1],[11,10],[9,1],[5,7],[13,4],[1,5],[13,11],[9,2],[7,8],[12,3],[3,6],[11,3],[7,9],[8,1],[3,7],[6,9],[9,10],[2,7],[5,8],[11,4],[4,1],[7,2],[9,11],[5,9],[10,5],[8,11],[13,6],[11,12],[1,7],[6,3],[4,9],[9,4],[3,1],[11,13],[7,11],[5,2],[10,13],[1,8],[9,5],[6,11],[9,12],[5,3],[3,9],[8,5],[11,6],[4,3],[7,4],[3,10],[3,3],[9,13],[5,12],[10,7],[8,13],[13,8],[1,10],[7,5],[3,4],[6,5],[2,11],[2,3],[13,9],[1,11],[9,7],[7,13],[12,9],[8,7],[11,9],[5,5],[10,9],[12,11],[10,3],[13,5],[7,3],[7,10],[12,5],[5,11],[11,7],[4,11],[9,6],[3,11],[11,8],[3,12],[1,3],[7,7]],"players":[{"name":"敵","pos":{"x":1,"y":1},"power":2,"setBombLimit":2,"ch":"敵","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":0},{"name":"あなた","pos":{"x":1,"y":12},"power":2,"setBombLimit":2,"ch":"あ","isAlive":true,"setBombCount":0,"totalSetBombCount":1,"id":1},{"name":"何か","pos":{"x":12,"y":1},"power":2,"setBombLimit":2,"ch":"何","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":2},{"name":"何か","pos":{"x":12,"y":13},"power":2,"setBombLimit":2,"ch":"何","isAlive":true,"setBombCount":0,"totalSetBombCount":0,"id":3}],"bombs":[],"items":[{"pos":{"x":3,"y":13},"name":"力"}],"fires":[[2,13],[1,13],[3,13]]}
 ```
+
+###### Turn30
 
 ![Turn30](https://raw.githubusercontent.com/goto13/CSBombmanServer/image/images/turn30.png "Turn30")
 
@@ -84,7 +88,7 @@ https://github.com/ha2ne2/BombmanServer
 - Action value has two parts separated by comma.
   - 1st part is direction to move. You can use either one of UP, DOWN, RIGHT, LEFT. if you want to stay at the same place, please insert something other than UP, DOWN, RIGHT, LEFT.
   - 2nd part is whether you set bomb at the place.
-- You can send "UP, true". In this case, if you can move to the upper side of you, put the bomb in the place you are at and move to the upper side. The bomb is not placed on the moving destination, but is placed at the source location.
+- You can send "UP, true". In this case, if you can move to the upper side of you, put the bomb in the place you are at and move to the upper side. The bomb is not placed on the moving destination, but is placed at the original location.
 
 #### Sample of Client.
 ```
