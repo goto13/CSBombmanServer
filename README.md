@@ -10,19 +10,19 @@ https://github.com/ha2ne2/BombmanServer
 |(order)| key  | type | sample | memo|
 |-------| ---- | ---- | ------ | --- |
 |1      | turn | number | 0 | start from 0 |
-|2      | walls | array<array<number>> | see [sample](#SampleJSONFromServer) | In walls and blocks, Position is expressed simply as a numerical array. [1, 5] is expressed as {"x": 1, "y": 5} by Position notation. |
-|3      | blocks | array<array<number>> | see [sample](#SampleJSONFromServer) | In walls and blocks, Position is expressed simply as a numerical array. [1, 5] is expressed as {"x": 1, "y": 5} by Position notation. |
-|4      | players | array<object<[Player](#Player)>> | see [sample](#SampleJSONFromServer) | - |
-|5      | bombs | array<object<[Bomb](#Bomb)>> | see [sample](#SampleJSONFromServer) | - |
-|6      | items | array<<array<number>>> | see [sample](#SampleJSONFromServer) | - |
-|7      | fires | array<object<[Item](#Item)>> | see [sample](#SampleJSONFromServer) | - |
+|2      | walls | array<array<number>> | see [sample](#samplejsonfromserver) | In walls and blocks, Position is expressed simply as a numerical array. [1, 5] is expressed as {"x": 1, "y": 5} by Position notation. |
+|3      | blocks | array<array<number>> | see [sample](#samplejsonfromserver) | In walls and blocks, Position is expressed simply as a numerical array. [1, 5] is expressed as {"x": 1, "y": 5} by Position notation. |
+|4      | players | array<object<[Player](#player)>> | see [sample](#samplejsonfromserver) | - |
+|5      | bombs | array<object<[Bomb](#bomb)>> | see [sample](#samplejsonfromserver) | - |
+|6      | items | array<<array<number>>> | see [sample](#samplejsonfromserver) | - |
+|7      | fires | array<object<[Item](#item)>> | see [sample](#samplejsonfromserver) | - |
 
 ##### Player
 
 |(order)| key  | type | sample | memo|
 |-------| ---- | ---- | ------ | --- |
 |1      | name | string | あなた | player name |
-|2      | pos | [Position](#Position) | {"x":1, "y":1} | position of player |
+|2      | pos | [Position](#position) | {"x":1, "y":1} | position of player |
 |3      | power | number | 2 | bom's firepower installed by the player |
 |4      | ch | string | あ | the first character of player name |
 |5      | isAlive | boolean | true | if player is alive, true, otherwise, false |
@@ -34,7 +34,7 @@ https://github.com/ha2ne2/BombmanServer
 
 |(order)| key  | type | sample | memo|
 |-------| ---- | ---- | ------ | --- |
-|1      | pos | [Position](#Position) | {"x":1, "y":1} | position of bomb |
+|1      | pos | [Position](#position) | {"x":1, "y":1} | position of bomb |
 |2      | timer | number | 9 | Remaining turn to explode. The timer starts from 9 and bomb is exploded in 0. |
 |3      | power | number | 2 | Bom's firepower |
 
@@ -42,7 +42,7 @@ https://github.com/ha2ne2/BombmanServer
 
 |(order)| key  | type | sample | memo|
 |-------| ---- | ---- | ------ | --- |
-|1      | pos | [Position](#Position) | {"x":1, "y":1} | Position of item. When an item appears, it is at the same position as fire. |
+|1      | pos | [Position](#position) | {"x":1, "y":1} | Position of item. When an item appears, it is at the same position as fire. |
 |2      | name | string | 弾 | tither one of "弾" and "力" |
 
 ##### Position
@@ -51,19 +51,6 @@ https://github.com/ha2ne2/BombmanServer
 |-------| ---- | ---- | ------ | --- |
 |1      | x | number | 1 | x is the horizontal coordinate. The wall on the left is 0 and the wall on the right is 14. |
 |2      | y | number | 1 | y is the vertical coordinate. The top wall is 0 and the bottom wall is 14. |
-
-##### Player
-
-|(order)| key  | type | sample | memo|
-|-------| ---- | ---- | ------ | --- |
-|1      | name | string | あなた | player name |
-|2      | pos | [Position](#Position) | {"x":1, "y":1} | position of player |
-|3      | power | number | 2 | Bom's firepower installed by the player |
-|4      | ch | string | あ | the first character of player name |
-|5      | isAlive | boolean | true | if player is alive, true, otherwise, false |
-|6      | setBombCount | number | 0 | number of bombs which is set by player and the bomb has not been burned. |
-|6      | totalSetBombCount | number | 0 | number of bombs which is set by player |
-|6      | id | number | 0 | any one of 0 to 3 |
 
 
 #### SampleJSONFromServer
