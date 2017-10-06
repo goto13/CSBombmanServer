@@ -11,16 +11,23 @@ namespace CSBombmanServer
     {
         public const int DEFAULT_POWER = 2;
         public const int DEFAULT_BOMB_LIMIT = 2;
-        [JsonProperty("name")]
+        [JsonProperty("name", Order = 1)]
         public string Name { get; set; }
+        [JsonProperty(Order = 2)]
         public Position pos;
+        [JsonProperty(Order = 3)]
         public int power;
+        [JsonProperty(Order = 4)]
         public int setBombLimit;
+        [JsonProperty(Order = 5)]
         public char ch;
+        [JsonProperty(Order = 6)]
         public bool isAlive;
+        [JsonProperty(Order = 7)]
         public int setBombCount;
+        [JsonProperty(Order = 8)]
         public int totalSetBombCount;
-        [JsonProperty("id")]
+        [JsonProperty("id", Order = 9)]
         public int Id;
 
         public virtual void SetId(int value)
