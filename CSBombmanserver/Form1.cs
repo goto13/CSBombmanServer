@@ -40,24 +40,43 @@ namespace CSBombmanServer
 
         public void fnUpdate_Label()
         {
-            Invoke(new MethodInvoker(UpdateTask));
-            Application.DoEvents();
+            field.BeginInvoke(new MethodInvoker(UpdateTask));
+            //Application.DoEvents();
         }
 
 
         public void DisplayTimeEvent(object source, ElapsedEventArgs e)
         {
-            update_delegate.DynamicInvoke();
+            update_delegate.BeginInvoke(null, null);
         }
 
-        private static void AppendText(RichTextBox field, string text, Color color)
+        private void AppendTextWithFire(string text)
+        {
+            //field.Text = text;
+            field.ResetText();
+            var array = text.Split('火');
+            for (var i = 0; i < array.Length - 1; i++)
+            {
+                var s = array[i];
+                if (!string.IsNullOrEmpty(s))
+                    AppendText(s, field.ForeColor);
+
+                AppendText("火", Color.Red);
+            }
+            AppendText(array.Last(), field.ForeColor);
+
+            field.SelectionColor = field.ForeColor;
+        }
+
+        private void AppendText(string text, Color color)
         {
             field.SelectionStart = field.TextLength;
             field.SelectionLength = 0;
 
             field.SelectionColor = color;
             field.AppendText(text);
-            field.SelectionColor = field.ForeColor;
+            // 後処理は呼び出し元にした
+            //field.SelectionColor = field.ForeColor;
         }
 
         private void DisposePlayers()
@@ -132,31 +151,15 @@ namespace CSBombmanServer
             you.keyStates[3] = false;
         }
 
-        private void ShowHistoryMap()
+        private void ShowHistoryMap(int targetTurn)
         {
-            ShowMap(Utils.JsonToObject<MapData>(histories[showTurn]));
+            ShowMap(Utils.JsonToObject<MapData>(histories[targetTurn]), histories[targetTurn]);
         }
 
-        /// <summary>
-        /// show mapdata.
-        /// If there is fire, the fire is displayed in Red color.
-        /// </summary>
-        /// <param name="mapData"></param>
-        public void ShowMap(MapData mapData)
+        public void ShowMap(MapData mapData, string mapJson)
         {
             string mapString = MapToString(mapData);
-
-            // TODO 色を塗るのは後にする
-            //MutableAttributeSet attr = new SimpleAttributeSet();
-            //StyleConstants.setForeground(attr, Color.RED);
-            //ArrayList<int[]> firePos = FindFireIndex(mapString);
-            field.Text = mapString;
-            //StyledDocument doc = (StyledDocument)field.getDocument();
-            //firePos.forEach(p-> {
-            //    doc.setCharacterAttributes(p[0], p[1], attr, true);
-            //});
-            //mapString.
-
+            AppendTextWithFire(mapString);
             var infoBuilder = new StringBuilder();
             Players.ForEach(p =>
             {
@@ -168,7 +171,7 @@ namespace CSBombmanServer
             infoArea.Text = infoBuilder.ToString();
 
             Console.Write(mapString);
-            Console.WriteLine(Utils.ObjectToJson(mapData) + "\n");
+            Console.WriteLine(mapJson + "\n");
         }
 
 
@@ -296,15 +299,16 @@ namespace CSBombmanServer
             fires = new List<Position>();
             mapData = new MapData(turn, walls, blocks, Players, bombs, items, fires);
             histories = new List<string>();
-            histories.Add(Utils.ObjectToJson(mapData));
-            ShowMap(mapData);
+            var mapJson = Utils.ObjectToJson(mapData);
+            histories.Add(mapJson);
+            ShowMap(mapData, mapJson);
             textArea.Text = "TURN 0: ゲームが開始されました\n";
 
             // 最初の開始時には1秒待つ
             System.Threading.Thread.Sleep(1000);
 
             update_delegate = new Update_label_delegate(fnUpdate_Label);
-            my_timer = new System.Timers.Timer(1000);
+            my_timer = new System.Timers.Timer(Utils.DEFAULT_SLEEP_TIME);
             my_timer.Elapsed += new ElapsedEventHandler(DisplayTimeEvent);
             my_timer.Start();
         }
@@ -395,7 +399,7 @@ namespace CSBombmanServer
             }
             else
             {
-                ShowHistoryMap();
+                ShowHistoryMap(showTurn);
             }
         }
 
@@ -406,7 +410,7 @@ namespace CSBombmanServer
             if (showTurn < 0)
                 showTurn = 0;
 
-            ShowHistoryMap();
+            ShowHistoryMap(showTurn);
         }
 
 
@@ -417,7 +421,7 @@ namespace CSBombmanServer
             if (showTurn < 0)
                 showTurn = 0;
 
-            ShowHistoryMap();
+            ShowHistoryMap(showTurn);
         }
 
         private void next2_Click(object sender, EventArgs e)
@@ -430,7 +434,7 @@ namespace CSBombmanServer
             }
             else
             {
-                ShowHistoryMap();
+                ShowHistoryMap(showTurn);
             }
         }
 
@@ -444,20 +448,23 @@ namespace CSBombmanServer
         {
             my_timer.Stop();
             my_timer.Interval = Utils.DEFAULT_SLEEP_TIME;
+            Console.WriteLine("st" + my_timer.Interval);
             my_timer.Start();
         }
 
         private void fast_Click(object sender, EventArgs e)
         {
             my_timer.Stop();
-            my_timer.Interval = 100d;
+            my_timer.Interval = Utils.DEFAULT_SLEEP_TIME * 2d / 3.0d;
+            Console.WriteLine("f1" + my_timer.Interval);
             my_timer.Start();
         }
 
         private void faster_Click(object sender, EventArgs e)
         {
             my_timer.Stop();
-            my_timer.Interval = 1.0d;
+            my_timer.Interval = Utils.DEFAULT_SLEEP_TIME / 3.0d;
+            Console.WriteLine("f2" + my_timer.Interval);
             my_timer.Start();
         }
 
@@ -477,13 +484,23 @@ namespace CSBombmanServer
             return checkBox1;
         }
 
-        private void UpdateTask()
+        private async void UpdateTask()
         {
             // キャラクタの行動
-            string jsonMapData = Utils.ObjectToJson(mapData);
-            List<ActionData> actions = Players.AsParallel().Select(p => p.Action(jsonMapData)).ToList();
-            actions.ForEach(action => EvalPutBombAction(action));
-            actions.ForEach(action => EvalMoveAction(action));
+            var jsonMapData = histories.Last();
+
+            Func<ParallelQuery<ActionData>> asyncJob = () =>
+            {
+                var tasks = Players.Where(p => p.isAlive).AsParallel().Select(p => p.Action(jsonMapData));
+                return tasks.AsParallel().Where(t => t.Wait((int)(my_timer.Interval * 0.8))).Select(t => t.Result);
+            };
+
+            var actions = await Task.Run(asyncJob);
+            foreach (var action in actions)
+            {
+                EvalPutBombAction(action);
+                EvalMoveAction(action);
+            }
 
             turn += 1;
             showTurn = turn;
@@ -580,30 +597,22 @@ namespace CSBombmanServer
             items.AddRange(burningBlocks.Where(b => b.GetItem() != null).Select(b => b.GetItem()));
             blocks.RemoveAll(b => burningBlocks.Contains(b));
 
-            Players.ForEach(p =>
+            foreach(var p in Players)
             {
-                foreach (Position fire in fires)
+                if (!p.isAlive)
+                    continue;
+                if (fires.Contains(p.pos) || walls.Contains(p.pos))
                 {
-                    if (p.pos.Equals(fire))
-                    {
-                        p.ch = '墓';
-                        p.isAlive = false;
-                    }
+                    p.ch = '墓';
+                    p.isAlive = false;
                 }
-                foreach (Position fire in walls)
-                {
-                    if (p.pos.Equals(fire))
-                    {
-                        p.ch = '墓';
-                        p.isAlive = false;
-                    }
-                }
-            });
+            }
 
             mapData = new MapData(turn, walls, blocks, Players, bombs, items, fires);
-            histories.Add(Utils.ObjectToJson(mapData));
+            var mapJson = Utils.ObjectToJson(mapData);
+            histories.Add(mapJson);
 
-            ShowMap(mapData);
+            ShowMap(mapData, mapJson);
 
             var living = Players.Where(p => p.isAlive);
             if (living.Count() == 1)
@@ -645,7 +654,7 @@ namespace CSBombmanServer
         {
             try
             {
-                Console.WriteLine(action.ToString());
+                //Console.WriteLine(action.ToString());
                 Player p = action.p;
                 if (!action.message.Equals(""))
                     textArea.AppendText(action.p.Name + "「" + action.message + "」\n");
@@ -655,8 +664,7 @@ namespace CSBombmanServer
                     Bomb bomb = new Bomb(p);
                     bool existingBomb = bombs.Any(b => b.pos.Equals(bomb.pos));
 
-                    if (p.isAlive
-                        && !existingBomb
+                    if (!existingBomb
                         && p.CanSetBomb())
                     {
                         p.setBombCount += 1;
@@ -692,8 +700,7 @@ namespace CSBombmanServer
                     break;
             }
 
-            if (p.isAlive
-                && nextPos != null
+            if (nextPos != null
                 && !walls.Contains(nextPos)
                 && !blocks.Any(b => b.pos.Equals(nextPos))
                 && !bombs.Any(b => b.pos.Equals(nextPos)))

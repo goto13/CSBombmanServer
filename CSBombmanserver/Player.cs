@@ -43,7 +43,7 @@ namespace CSBombmanServer
             return setBombCount < setBombLimit;
         }
 
-        public virtual ActionData Action(string mapdata)
+        public async virtual Task<ActionData> Action(string mapdata)
         {
             return new ActionData(this, "STAY", false);
         }

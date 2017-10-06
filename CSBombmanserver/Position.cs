@@ -25,7 +25,7 @@ namespace CSBombmanServer
                 return false;
             }
 
-            // If parameter cannot be cast to Point return false.
+            // If parameter cannot be cast to Position return false.
             Position p = obj as Position;
             if ((System.Object)p == null)
             {

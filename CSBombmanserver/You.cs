@@ -23,7 +23,7 @@ namespace CSBombmanServer
             keyStates = new bool[5] { false, false, false, false, false };
             putBomb = false;
         }
-        public override ActionData Action(string mapData)
+        public async override Task<ActionData> Action(string mapData)
         {
             string nextMove = "STAY";
             if (direction == "UP" || keyStates[0])

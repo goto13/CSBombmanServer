@@ -17,7 +17,7 @@ namespace CSBombmanServer
         }
 
 
-        public override ActionData Action(string mapData)
+        public async override Task<ActionData> Action(string mapData)
         {
             string[] moves = { "UP", "DOWN", "LEFT", "RIGHT" };
             return new ActionData(this, moves[rand.Next(0, 3)], false);

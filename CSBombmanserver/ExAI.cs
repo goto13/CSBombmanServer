@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CSBombmanServer
 {
@@ -16,12 +17,6 @@ namespace CSBombmanServer
         System.IO.StreamReader reader;
         [NonSerialized]
         System.IO.StreamReader errorReader;
-        //[NonSerialized]
-        //System.IO.BufferedStream writer;
-        //[NonSerialized]
-        //System.IO.BufferedStream reader;
-        //[NonSerialized]
-        //System.IO.BufferedStream errorReader;
         [NonSerialized]
         Process proc;
 
@@ -34,12 +29,8 @@ namespace CSBombmanServer
                 writer = (proc.StandardInput);
                 errorReader = (proc.StandardError);
 
-                //reader = new System.IO.BufferedStream(proc.StandardOutput.BaseStream);
-                //writer = new System.IO.BufferedStream(proc.StandardInput.BaseStream);
-                //errorReader = new System.IO.BufferedStream(proc.StandardError.BaseStream);
-
                 // 標準エラー出力はサーバの標準出力に垂れ流す
-                new Thread(new ThreadStart(ThreadFunction)).Start();
+                //new Thread(new ThreadStart(ThreadFunction)).Start();
                 Name = reader.ReadLine();
                 ch = Name.ToCharArray()[0];
             }
@@ -47,6 +38,7 @@ namespace CSBombmanServer
             {
                 Console.WriteLine(e);
                 ch = '落';
+                isAlive = false;
             }
         }
 
@@ -62,8 +54,6 @@ namespace CSBombmanServer
             psi.StandardErrorEncoding = Encoding.UTF8;
             process.StartInfo = psi;
             process.Start();
-            //process.BeginOutputReadLine();
-            //process.BeginErrorReadLine();
             return process;
         }
 
@@ -84,14 +74,15 @@ namespace CSBombmanServer
         }
 
 
-        public override ActionData Action(string mapData)
+        public async override Task<ActionData> Action(string mapData)
         {
             try
             {
-                writer.Write(mapData + "\n");
-                writer.Flush();
+                writer.WriteLine(mapData);
+                //writer.Flush();
                 // TODO どう書くのがいいのか
-                string raw = reader.ReadLineAsync().Result;
+                var raw = await reader.ReadLineAsync();
+
                 Console.WriteLine("RAW: " + Name + ": " + raw);
                 string[] data = raw.Split(',');
                 if (data.Length == 3)
@@ -103,6 +94,7 @@ namespace CSBombmanServer
             {
                 Console.WriteLine(e);
                 this.ch = '落';
+                isAlive = false;
                 return new ActionData(this, "STAY", false);
             }
         }
