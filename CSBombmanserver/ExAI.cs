@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CSBombmanServer
@@ -26,7 +24,7 @@ namespace CSBombmanServer
             {
                 proc = ProcessStart(command);
                 reader = (proc.StandardOutput);
-                writer = (proc.StandardInput);
+                writer = new StreamWriter(proc.StandardInput.BaseStream, Encoding.UTF8);
                 errorReader = (proc.StandardError);
 
                 // 標準エラー出力はサーバの標準出力に垂れ流す
@@ -44,7 +42,6 @@ namespace CSBombmanServer
 
         static Process ProcessStart(string cmd)
         {
-            Process process = new Process();
             ProcessStartInfo psi = new ProcessStartInfo(cmd);
             psi.UseShellExecute = false;
             psi.RedirectStandardInput = true;
@@ -52,6 +49,8 @@ namespace CSBombmanServer
             psi.RedirectStandardError = true;
             psi.StandardOutputEncoding = Encoding.UTF8;
             psi.StandardErrorEncoding = Encoding.UTF8;
+
+            Process process = new Process();
             process.StartInfo = psi;
             process.Start();
             return process;
@@ -79,12 +78,12 @@ namespace CSBombmanServer
             try
             {
                 writer.WriteLine(mapData);
-                //writer.Flush();
+                writer.Flush();
                 // TODO どう書くのがいいのか
                 var raw = await reader.ReadLineAsync();
 
                 Console.WriteLine("RAW: " + Name + ": " + raw);
-                string[] data = raw.Split(',');
+                string[] data = raw.Split(new char[] { ',' }, 3);
                 if (data.Length == 3)
                     return new ActionData(this, data[0], bool.Parse(data[1]), data[2]);
                 else
@@ -105,7 +104,7 @@ namespace CSBombmanServer
             Id = value;
             try
             {
-                writer.Write(Id + "\n");
+                writer.WriteLine(Id);
                 writer.Flush();
             }
             catch (Exception e)

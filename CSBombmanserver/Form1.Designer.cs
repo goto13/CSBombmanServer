@@ -102,6 +102,7 @@ namespace CSBombmanServer
 			this.textArea.Location = new System.Drawing.Point(2, 435);
 			this.textArea.Multiline = true;
 			this.textArea.Name = "textArea";
+			this.textArea.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textArea.Size = new System.Drawing.Size(477, 114);
 			this.textArea.TabIndex = 5;
 			// 
