@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -42,7 +42,21 @@ namespace CSBombmanServer
 
         static Process ProcessStart(string cmd)
         {
-            ProcessStartInfo psi = new ProcessStartInfo(cmd);
+            ProcessStartInfo psi;
+            Console.WriteLine(cmd);
+            if (cmd.StartsWith("\"") && cmd.EndsWith("\""))
+            {
+                psi = new ProcessStartInfo(cmd);
+            }
+            else if (cmd.Contains(" "))
+            {
+                psi = new ProcessStartInfo(cmd.Substring(0, cmd.IndexOf(' ')), cmd.Substring(cmd.IndexOf(' ') + 1));
+            }
+            else
+            {
+                psi = new ProcessStartInfo(cmd);
+            }
+
             psi.UseShellExecute = false;
             psi.RedirectStandardInput = true;
             psi.RedirectStandardOutput = true;

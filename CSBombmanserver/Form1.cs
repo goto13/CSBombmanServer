@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -236,7 +236,7 @@ namespace CSBombmanServer
             string[] lines = System.IO.File.ReadAllLines(configPath);
 
             var tmp = new List<string>();
-            lines.Take(4).ToList().ForEach(line => tmp.Add(line.Split('=')[1]));
+            lines.Take(4).ToList().ForEach(line => tmp.Add(line.Substring(line.IndexOf("=") + 1)));
             tmp.RemoveAll((s => s.Trim() == ""));
 
             Players = new List<Player>();
