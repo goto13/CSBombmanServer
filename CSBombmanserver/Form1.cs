@@ -262,6 +262,11 @@ namespace CSBombmanServer
                 Players[i].SetId(i);
             }
 
+            foreach(var p in Players)
+            {
+                textArea.AppendText($"{p.Id}:{p.Name}\n");
+            }
+
             walls = new List<Position>();
             for (int x = 0; x < Utils.WIDTH; x++)
                 for (int y = 0; y < Utils.HEIGHT; y++)
@@ -302,7 +307,7 @@ namespace CSBombmanServer
             var mapJson = Utils.ObjectToJson(mapData);
             histories.Add(mapJson);
             ShowMap(mapData, mapJson);
-            textArea.Text = "TURN 0: ゲームが開始されました\n";
+            textArea.AppendText("TURN 0: ゲームが開始されました\n");
 
             // 最初の開始時には1秒待つ
             System.Threading.Thread.Sleep(1000);

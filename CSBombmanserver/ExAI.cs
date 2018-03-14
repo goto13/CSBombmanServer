@@ -24,7 +24,8 @@ namespace CSBombmanServer
             {
                 proc = ProcessStart(command);
                 reader = (proc.StandardOutput);
-                writer = new StreamWriter(proc.StandardInput.BaseStream, Encoding.UTF8);
+                Encoding utf8WithoutBom = new UTF8Encoding(false);
+                writer = new StreamWriter(proc.StandardInput.BaseStream, utf8WithoutBom);
                 errorReader = (proc.StandardError);
 
                 // 標準エラー出力はサーバの標準出力に垂れ流す
@@ -118,7 +119,7 @@ namespace CSBombmanServer
             Id = value;
             try
             {
-                writer.WriteLine(Id);
+                writer.WriteLine(value.ToString());
                 writer.Flush();
             }
             catch (Exception e)
